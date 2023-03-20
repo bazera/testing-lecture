@@ -1,31 +1,69 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
+  let fixture: ComponentFixture<AppComponent>;
+  let component: AppComponent;
+
   beforeEach(async () => {
+    // Arrange
     await TestBed.configureTestingModule({
-      declarations: [
-        AppComponent
-      ],
+      declarations: [AppComponent],
     }).compileComponents();
+
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    // Assert
+    expect(component).toBeTruthy();
   });
 
-  it(`should have as title 'ng-testing'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('ng-testing');
+  it('should be zero by default', () => {
+    // Act
+    const numberEl = fixture.debugElement.query(
+      By.css("[data-testId='number']")
+    );
+    const number = numberEl.nativeElement.innerText;
+
+    // Assert
+    expect(number).toBe('0');
   });
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+  it('should be increased by one', () => {
+    // Act
+    const incBtnEl = fixture.debugElement.query(
+      By.css("[data-testId='inc-btn']")
+    );
+
+    incBtnEl.triggerEventHandler('click', null);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('ng-testing app is running!');
+
+    const numberElAfter = fixture.debugElement.query(
+      By.css("[data-testId='number']")
+    ).nativeElement.innerText;
+
+    // Assert
+    expect(numberElAfter).toBe('1');
+  });
+
+  it('should be decreased by one', () => {
+    // Act
+    const decBtnEl = fixture.debugElement.query(
+      By.css("[data-testId='dec-btn']")
+    );
+
+    decBtnEl.triggerEventHandler('click', null);
+    fixture.detectChanges();
+
+    const numberElAfter = fixture.debugElement.query(
+      By.css("[data-testId='number']")
+    ).nativeElement.innerText;
+
+    // Assert
+    expect(numberElAfter).toBe('-1');
   });
 });
