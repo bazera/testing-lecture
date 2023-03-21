@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { AdultUsersNamesPipe } from './adult-users-names.pipe';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
@@ -9,7 +10,7 @@ describe('AppComponent', () => {
   beforeEach(async () => {
     // Arrange
     await TestBed.configureTestingModule({
-      declarations: [AppComponent],
+      declarations: [AppComponent, AdultUsersNamesPipe],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AppComponent);
@@ -39,7 +40,7 @@ describe('AppComponent', () => {
       By.css("[data-testId='inc-btn']")
     );
 
-    incBtnEl.triggerEventHandler('click', null);
+    incBtnEl.triggerEventHandler('click');
     fixture.detectChanges();
 
     const numberElAfter = fixture.debugElement.query(
@@ -56,7 +57,7 @@ describe('AppComponent', () => {
       By.css("[data-testId='dec-btn']")
     );
 
-    decBtnEl.triggerEventHandler('click', null);
+    decBtnEl.triggerEventHandler('click');
     fixture.detectChanges();
 
     const numberElAfter = fixture.debugElement.query(
