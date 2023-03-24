@@ -1,9 +1,15 @@
 import { Component } from '@angular/core';
+import { DiscountService } from './discount.service';
 
 export interface User {
   firstName: string;
   lastName: string;
   age: number;
+}
+
+export interface ShopItem {
+  name: string;
+  price: number;
 }
 
 @Component({
@@ -42,7 +48,30 @@ export class AppComponent {
     },
   ];
 
-  constructor() {}
+  shopItems: ShopItem[] = [
+    {
+      name: 'Pants',
+      price: 100,
+    },
+    {
+      name: 'T-Shirt',
+      price: 80,
+    },
+    {
+      name: 'Shoes',
+      price: 230,
+    },
+  ];
+
+  lastBoughtItem: {
+    item: ShopItem | undefined;
+    finalPrice: number;
+  } = {
+    item: undefined,
+    finalPrice: 0,
+  };
+
+  constructor(private discountService: DiscountService) {}
 
   increase() {
     this.number = this.number + 1;
@@ -50,5 +79,17 @@ export class AppComponent {
 
   decrease() {
     this.number--;
+  }
+
+  purchase(item: ShopItem) {
+    const finalPrice = this.discountService.purchase(item);
+    this.lastBoughtItem = {
+      item,
+      finalPrice,
+    };
+  }
+
+  ngOnInit() {
+    this.discountService.setDiscountPercent(10);
   }
 }

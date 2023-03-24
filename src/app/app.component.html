@@ -2,3 +2,20 @@
 <div id="number" data-testId="number">{{ number }}</div>
 <button (click)="increase()" data-testId="inc-btn">+</button>
 <div appHighlight>{{ users | adultUsersNames }}</div>
+<hr />
+<h1>Shop</h1>
+<ul class="shop">
+  <li *ngFor="let item of shopItems">
+    <h3>{{ item.name }}</h3>
+    <div>{{ item.price }} GEL</div>
+    <button (click)="purchase(item)">Purchase</button>
+  </li>
+</ul>
+<div
+  class="purchased-message"
+  data-testId="purchased-message"
+  *ngIf="lastBoughtItem.item"
+>
+  {{ lastBoughtItem.item.name }} was bought for
+  {{ lastBoughtItem.finalPrice }} GEL
+</div>

@@ -1,7 +1,30 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { AdultUsersNamesPipe } from './adult-users-names.pipe';
-import { AppComponent } from './app.component';
+import { AppComponent, ShopItem } from './app.component';
+import { DiscountService } from './discount.service';
+
+const shopItems: ShopItem[] = [
+  {
+    name: 'Pants',
+    price: 678,
+  },
+  {
+    name: 'T-Shirt',
+    price: 123,
+  },
+  {
+    name: 'Shoes',
+    price: 765,
+  },
+];
+
+const discountServiceMock = {
+  purchase(): number {
+    return 0;
+  },
+  setDiscountPercent() {},
+};
 
 describe('AppComponent', () => {
   let fixture: ComponentFixture<AppComponent>;
@@ -11,6 +34,12 @@ describe('AppComponent', () => {
     // Arrange
     await TestBed.configureTestingModule({
       declarations: [AppComponent, AdultUsersNamesPipe],
+      providers: [
+        {
+          provide: DiscountService,
+          useValue: discountServiceMock,
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AppComponent);
@@ -66,5 +95,20 @@ describe('AppComponent', () => {
 
     // Assert
     expect(numberElAfter).toBe('-1');
+  });
+
+  it('should display correct message after purchasing', () => {
+    const item = shopItems[0];
+    spyOn(discountServiceMock, 'purchase').and.returnValue(610.2);
+    component.purchase(item);
+
+    fixture.detectChanges();
+
+    const messageEl = fixture.debugElement.query(
+      By.css("[data-testId='purchased-message']")
+    );
+    const message = messageEl.nativeElement.innerText;
+
+    expect(message).toBe(`${shopItems[0].name} was bought for ${610.2} GEL`);
   });
 });
